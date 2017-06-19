@@ -13,8 +13,8 @@ public class Cell {
     public void setLiveNeighborCount(int count) {
         neighbors = count;
     }
-    public int getNeighbors() {
-        return neighbors;
+    public int getLiveNeighbors() {
+        return neighbors;      
     }
     public void updateState() {
         if (visible && neighbors >= 2 && neighbors <= 3)

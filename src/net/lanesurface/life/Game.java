@@ -1,11 +1,11 @@
 package net.lanesurface.life;
 
 public class Game {
-    public static final int WIDTH  = 600,
-                            HEIGHT = 600;
+    public static final int WIDTH  = 1000,
+                            HEIGHT = 1000;
     
-    public static final int HORIZONTAL_CELLS = 20,
-                            VERTICAL_CELLS   = 20;
+    public static final int HORIZONTAL_CELLS = 50,
+                            VERTICAL_CELLS   = 50;
     
     public static Cell[][] cells = new Cell[VERTICAL_CELLS][HORIZONTAL_CELLS];
     
@@ -20,7 +20,7 @@ public class Game {
      * it would be difficult to see the effects of updates if this was any 
      * larger.
      */
-    private static final int IPS = 2;
+    private static final int IPS = 10;
     /**
      * The amount of time each update takes.
      */
@@ -47,10 +47,6 @@ public class Game {
         );
         window.setVisible(true);
         
-        long lastFpsTime = 0;
-        int updates = 0,
-            fps     = 0;
-        
         // Main game loop.
         while(running) {
             long now = System.nanoTime();
@@ -58,19 +54,11 @@ public class Game {
             lastTime = now;
             lag += elapsed;
                 
-            lastFpsTime += elapsed;
-            fps++;
-            if (lastFpsTime >= 1_000_000_000) {
-                System.out.println("FPS: " + fps + " Updates: " + updates);
-                lastFpsTime = updates = fps = 0;
-            }
-                
             // Because the times that we update is fixed, the speed of the
             // simulation is unaffected by a faster/slower processing speed.
             while (lag >= NS_PER_UPDATE) {
                 if (!paused) update();
                 lag -= NS_PER_UPDATE;
-                updates++;
             }
             
             // Render as many times as we can between updates.
