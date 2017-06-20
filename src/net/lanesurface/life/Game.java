@@ -1,11 +1,11 @@
 package net.lanesurface.life;
 
 public class Game {
-    public static final int WIDTH  = 1000,
-                            HEIGHT = 1000;
+    public static final int WIDTH  = 600,
+                            HEIGHT = 600;
     
-    public static final int HORIZONTAL_CELLS = 50,
-                            VERTICAL_CELLS   = 50;
+    public static final int HORIZONTAL_CELLS = 30,
+                            VERTICAL_CELLS   = 30;
     
     public static Cell[][] cells = new Cell[VERTICAL_CELLS][HORIZONTAL_CELLS];
     

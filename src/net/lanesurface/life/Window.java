@@ -11,13 +11,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class Window extends JFrame {
     public Canvas canvas;
     
     public Window(String name, int width, int height) {
         super(name);
         
-        setLocationRelativeTo(null);
+        setLocationByPlatform(true);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
