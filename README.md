@@ -2,6 +2,8 @@
 
 This is a recreation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), titled _life_. 
 
+![Pulsar](images/pulsar.gif)
+
 #### Setup 
 
 To run the game, clone the repository and compile the classes.
