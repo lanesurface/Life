@@ -1,0 +1,6 @@
+﻿#C A glider for Conway's Life.
+#R 20 20
+x = 3, y = 3, rule = B3/S23
+bo$
+2bo$
+3o!

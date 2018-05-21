@@ -1,27 +1,31 @@
 package net.lanesurface.life;
 
 public class Cell {
-    private boolean visible;
+    private boolean alive;
     private int neighbors;
     
-    public void toggleVisibility() {
-        visible = !visible;
+    public void toggleState() {
+        alive = !alive;
     }
-    public boolean isVisible() {
-        return visible;
+    
+    public boolean isAlive() {
+        return alive;
     }
+    
     public void setLiveNeighborCount(int count) {
         neighbors = count;
     }
+    
     public int getLiveNeighbors() {
         return neighbors;      
     }
+    
     public void updateState() {
-        if (visible && neighbors >= 2 && neighbors <= 3)
+        if (alive && neighbors >= 2 && neighbors <= 3)
             return;
-        else if (!visible && neighbors == 3)
-            visible = true;
+        else if (!alive && neighbors == 3)
+            alive = true;
         else if (neighbors < 2 || neighbors > 3)
-            visible = false;
+            alive = false;
     }
 }

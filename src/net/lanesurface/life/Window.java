@@ -2,10 +2,7 @@ package net.lanesurface.life;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
@@ -13,35 +10,39 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame {
-    public Canvas canvas;
+    private Game game;
     
-    public Window(String name, int width, int height) {
-        super(name);
+    public Window(Game game) {
+        super(game.config.title);
+        
+        this.game = game;
+        Game.GameHints config = game.config; // For convenience.
         
         setLocationByPlatform(true);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        getContentPane().setPreferredSize(new Dimension(width, height));
+        getContentPane().setPreferredSize(new Dimension(config.width, 
+                                                        config.height));
         pack();
         
-        canvas = new Canvas(width, height);
+        Canvas canvas = new Canvas(game);
         add(canvas);
         
-        addKeyListener(new KeyAdapter() {
+        addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_SPACE) 
-                    Game.pause();
+                    game.pause();
             }
         });
         
-        canvas.addMouseListener(new MouseAdapter() {
+        canvas.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent me) {
-                if (Game.paused) {
-                    int x = me.getX(),
-                        y = me.getY();
+            public void mouseClicked(MouseEvent mouse) {
+                if (game.isPaused()) {
+                    int x = mouse.getX(),
+                        y = mouse.getY();
                         
                     canvas.selectCell(x, y);
                 }
@@ -52,30 +53,39 @@ public class Window extends JFrame {
      * Handles rendering of the cells.
      */
     private static class Canvas extends JPanel {
-        private int cellWidth, cellHeight;
+        private final int cellWidth, cellHeight,
+                          rows, cols;
         
-        public Canvas(int width, int height) {
+        private Game game;
+        
+        public Canvas(Game game) {
             super();
             
-            cellWidth = width / Game.HORIZONTAL_CELLS;
-            cellHeight = height / Game.VERTICAL_CELLS;
+            this.game = game;
+            Game.GameHints conf = game.config;
+            
+            rows = conf.rows;
+            cols = conf.cols;
+            cellWidth = conf.width / cols;
+            cellHeight = conf.height / rows;
         }
+        
         @Override
-        public void paint(Graphics graphics) {
+        public void paint(java.awt.Graphics graphics) {
             super.paint(graphics);
             
             graphics.setColor(Color.WHITE);
             graphics.fillRect(0, 0, getWidth(), getHeight());
             
-            for (int row = 0; row < Game.VERTICAL_CELLS; row++) {
-                for (int column = 0; column < Game.HORIZONTAL_CELLS; column++) {
-                    Cell cell = Game.cells[row][column];
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < cols; column++) {
+                    Cell cell = game.getCell(row, column);
                     
                     int x = column * cellWidth,
                         y = row * cellHeight;
                     
-                    if (cell.isVisible()) {
-                        graphics.setColor(Color.BLACK);
+                    if (cell.isAlive()) {
+                        graphics.setColor(new Color(150, 65, 200));
                         graphics.fillRect(x, y, cellWidth, cellHeight);
                     }
                     graphics.setColor(Color.LIGHT_GRAY);
@@ -83,11 +93,12 @@ public class Window extends JFrame {
                 }
             }
         }
+        
         public void selectCell(int x, int y) {
-            int row    = y / cellHeight,
+            int row = y / cellHeight,
                 column = x / cellWidth;
-                
-            Game.cells[row][column].toggleVisibility();
+            
+            game.getCell(row, column).toggleState();
         }
     }
 }
